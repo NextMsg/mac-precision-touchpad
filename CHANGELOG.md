@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased — community USB preview
+## v0.1.0-alpha.1 — source preview (2026-09-23)
 
 Target: Magic Trackpad 2 Lightning, wired USB, Windows 11 x64. Local development binary version: 2026.922.4.0.
 
