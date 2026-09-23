@@ -242,3 +242,24 @@ ModelManifest.xml
 # FAKE - F# Make
 .fake/
 /external
+
+# Local driver development: never publish device backups, signing keys or traces.
+/driver-backups/
+/.toolchain/
+/.local/
+*.p12
+*.key
+*.pem
+*.cer
+*.etl
+*.tmf
+*.binlog
+__pycache__/
+
+# Machine-specific session notes; public documentation is maintained separately.
+/docs/development-environment.md
+/docs/experience-and-code-review.md
+/docs/installed-driver.md
+/docs/mt2-usb-edge-rejection.md
+/docs/pointer-jitter-diagnosis.md
+/docs/scroll-diagnosis.md

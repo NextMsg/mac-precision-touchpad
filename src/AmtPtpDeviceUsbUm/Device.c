@@ -507,6 +507,9 @@ AmtPtpEvtDeviceD0Entry(
 
 	pDeviceContext = DeviceGetContext(Device);
 	isTargetStarted = FALSE;
+	// A resumed device starts a new set of contact lifetimes.
+	AmtEdgeReset(&pDeviceContext->EdgeRejection);
+	ZeroMemory(&pDeviceContext->ContactLifecycle, sizeof(pDeviceContext->ContactLifecycle));
 
 	TraceEvents(
 		TRACE_LEVEL_INFORMATION, 

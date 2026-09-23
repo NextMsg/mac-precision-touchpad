@@ -1,101 +1,38 @@
-# Windows Precision Touchpad Implementation for Apple MacBook family/Magic Trackpad 2
+# Magic Trackpad 2 USB — Community fixes
 
-[![Build Status](https://ligstd.visualstudio.com/_apis/public/build/definitions/7694e0d0-94e3-4fd2-b39a-ecd261e1ba2e/22/badge)](https://ligstd.visualstudio.com/Apple%20PTP%20Trackpad/_build?definitionId=22)
+Community development fork of [imbushuo/mac-precision-touchpad](https://github.com/imbushuo/mac-precision-touchpad), retaining the upstream history and licenses. This is not an official Apple or upstream-maintainer release.
 
-This project implements Windows Precision Touchpad Protocol for Apple MacBook family/Magic Trackpad 2 on Windows 10. Both USB (traditional and T2), SPI and Bluetooth trackpads are supported.
+**Status: source preview. A production-signed public installer is not available yet.** The local development build is `2026.922.4.0`; its test certificate is not a public distribution solution.
 
-## Donation?
+[中文说明](README.zh-CN.md) · [Build and test](docs/community-development.md) · [Changes](CHANGELOG.md) · [Release plan](docs/public-release-plan.md) · [Historical upstream README](docs/upstream-README.md)
 
-A few people asked me why I removed donation. My current financial situation doesn't require me to accept donation for the budget of future development. If you are considering donation, please consider other meaningful projects and foundations, such as [Electronic Frontier Foundation](https://www.eff.org/).
+## Supported scope
 
-## Official Driver?
+The changes and dedicated package target **Magic Trackpad 2 Lightning over USB on Windows 11 x64**, hardware ID `USB\VID_05AC&PID_0265&MI_01`.
 
-Bootcamp 6.1.5 offers official driver for T2-based model and Magic Trackpad 2. You can also consider using the official driver if you have such Mac. If you have an older model (e.g. MacBooks before 2018/2019), this is the only implementation for these models (yet). 
+One physical device has been tested. Bluetooth, USB-C models, ARM64, Windows 10 and MacBook internal trackpads have not been validated for this fork. The inherited source code for other devices remains in the repository; that is not a claim of new compatibility testing.
 
-## Future Plans and feature tracking
+## Improvements
 
-Use the [Azure DevOps Board](https://ligstd.visualstudio.com/Apple%20PTP%20Trackpad/_workitems/) to track feature and device support plans. Bug reports should go to Github issues.
+- Reject contacts that begin in the outer 5% of each axis, until they lift. A finger starting centrally can continue to the edge.
+- Use the device's confirmed-touch state instead of nonzero contact area: a hovering second finger no longer becomes a false press.
+- Require three confirmed-touch samples before rejecting excessive contact area, avoiding transient size spikes during scrolling.
+- Preserve the last delivered coordinates on release; track contact lifetimes and ID reuse across missed host reads.
+- Correct Type 5 scan-time conversion, clamp coordinates, and complete failed output requests.
+- Provide a Windows 11 USB-only INF using the system-supplied driver dependencies.
 
-## See it in action (YouTube video)
+## Limitations
 
-[![Watch the video](https://img.youtube.com/vi/-GWlfw7omdo/hqdefault.jpg)](https://youtu.be/-GWlfw7omdo)
+The edge width is currently a build-time setting. Intentional gestures starting at an edge are rejected too. Physical clicks are not filtered by wrist identity. The old settings application's sensitivity controls are not connected to this Type 5 path.
 
-## Converged Installation Guide
+Automated tests and local user validation passed, including the reproducible hovering-finger drift case. Broader device, sleep/resume and clean-install testing is still needed. The inherited all-device package is not the package being released here.
 
-**IMPORTANT:** Given changes in Microsoft driver code signing policy, and the compliance need of EV certificate, CI auto builds beyond 2021/01/06 04:00AM EST will not be automatically signed with normal code signing certificate. These builds are still supposed via TestSigning, but not recommended for normal users. Proper WHQL and EV dual-signed packages will be released manually, which can be downloaded from the release page.
+## Installation and feedback
 
-0. Make sure you uninstalled `Trackpad++` completely if you have previously does so
-1. Go to the release tab in Github and download the newest version for your architecture
-2. Right click `AmtPtpDevice.inf` and install it
-3. If you have a Magic Trackpad 2 and want to use it in Bluetooth mode: manaully pair it in PC Settings.
+There is currently no general-user installation recommendation. Do not follow the historical upstream README's download/install instructions for this modified build. Developers can build and run the tests described in the development guide; trusted public packaging is tracked in the release plan.
 
-**Note: it is unnecessary to enable test signing, or install the certificate manually. Doing so may cause problems in installation. See [this issue](https://github.com/imbushuo/mac-precision-touchpad/issues/228#issuecomment-538689587) for detailed explanation.**
+When reporting a problem, include the device model, connection type, Windows build, driver version, reproduction steps and whether a rollback fixes it. Review diagnostic traces before sharing them; they may contain device identifiers and pointer coordinates.
 
-## Also Uninstallation (extremely important for reinstallation `Trackpad++` and such)
+## License and credits
 
-See also [here](https://magicutilities.net/magic-trackpad/help/mac-precision-touchpad-driver-installed).
-
-1. Go to device manager
-2. Find the "Apple Precision Touch Device", "Apple Multi-touch Trackpad HID filter" and "Apple Multi-touch Auxiliary Services"
-3. Right click "remove the device" and also check "uninstall driver"
-4. Rescan devices
-
-## Installation with Chocolatey
-
-The drivers are available as a [Chocolatey package](https://chocolatey.org/packages/mac-precision-touchpad/). To install using [Chocolatey](https://chocolatey.org) run:
-
-```
-choco install mac-precision-touchpad
-```
-
-## For developers
-
-- SPI/T2 version is kernel-mode driver, using KMDF Framework v1.23. Bluetooth driver uses KMDF Framework 1.15. Windows 10 Driver Development Kit Version 2004 or higher is required for development and testing.
-- USB version is a user-mode driver, using UMDF Framework v2.15. Windows 10 Driver Development Kit Version 2004 or higher is required for development and testing.
-- `ReleaseSigned` configuration is reserved for production build only, and it will be rendered as unsigned if you attempt to build using that configuration. (Historically it's signed, but due to EV certificate's requirements, the process has changed.)
-
-## Device support
-
-There is a bring-up issue for certain MacBook Pro and MacBook Air. I am looking into it. If you have such device with Windows installed, please contact me so I can look into the issue remotely (as I don't have many devices).
-
-- [x] Non-Retina MacBook 
-- [x] Some non-Retina MacBook Pro (2011 and 2012)
-- [x] MacBook Pro with Retina Display (MacBookPro 10,1, MacBookPro10,2 & MacBookPro11,1)
-- [x] All recent MacBook Air (Please report if your model is not supported)
-- [x] MacBook Pro with Retina Display (2013, 2014, 2015, 13-inch & 15-inch)
-- [x] New MacBook (12-inch)
-- [x] MacBook Pro 2015, 2016, 2017 (a few SPI devices are in work-in-progress state)
-- [x] T2-based devices: MacBook Air 2018, MacBook Pro 2017/2018/2019/2020: Use default fallback, experience might not be optimal. Open a issue if you encountered dead touch regions.
-- [x] Magic Trackpad 2 & 3 (USB)
-- [x] Magic Trackpad 2 & 3 (Bluetooth connection)
-
-## Roadmap
-
-- [x] Touchpad Device Power Management
-- [x] Touchpad Protocol Stack Implementation
-- [x] Touchpad Raw Input Output (in Driver Trace)
-- [x] HID Protocol Implementation (PTP Touch)
-- [x] HID Protocol Implementation (Configuration)
-- [x] Device Test (Magic Trackpad 2)
-- [x] Refine input experience (tip switch detection and pressure)
-- [x] Refine input experience (gesture experience)
-- [x] More Models
-- [x] SPI
-- [x] KM Driver cross-cert
-- [x] Bluetooth
-- [ ] Defuzz
-- [ ] Input sensitivity configuration
-
-## Acknowledgements
-
-**UPDATE 2021/05**: She got an M1 Mac now.
-
-People familiar with me know that I don't use Apple MacBook (so development work of this driver occurs on a Surface Pro 4). People probably think it doesn't make sense that I started this project. The motivation behind this project origin from complaints from my girlfriend. Hearing about frequent complains about Dell XPS 13's touchpad (though it passed Precision Touchpad certification), I decided to start this project, so by the time she switches to MacBook Pro, she will have excellent touchpad experience out-of-box, even on Windows. This driver is made for you, but also for everyone.
-
-I would like to thank projects like [magictrackpad2-dkms](https://github.com/robbi5/magictrackpad2-dkms) and [macbook12-spi-driver](https://github.com/cb22/macbook12-spi-driver) that inspire me. I would also like to thank my friends for providing me immense help on devices and testing.
- 
-## License
-
-- USB driver is licensed under [GPLv2](LICENSE-GPL.md).
-- SPI driver is licensed under [MIT](LICENSE-MIT.md).
-
+The modified USB driver remains under [GPLv2](LICENSE-GPL.md), as specified by [the upstream license notice](LICENSE.md). Retain the upstream authors' copyright notices. Any future binary release must provide its corresponding modified source and build materials. Unmodified components retain their existing licenses, including MIT for the SPI component.

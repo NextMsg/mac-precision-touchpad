@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="ReleaseSigned|ARM64">
@@ -36,6 +36,8 @@
   <ItemGroup>
     <ClInclude Include="include\AppleDefinition.h" />
     <ClInclude Include="include\Device.h" />
+    <ClInclude Include="include\EdgeRejection.h" />
+    <ClInclude Include="include\ContactLifecycle.h" />
     <ClInclude Include="include\DeviceFamily\Wellspring3.h" />
     <ClInclude Include="include\DeviceFamily\Wellspring5.h" />
     <ClInclude Include="include\DeviceFamily\Wellspring6.h" />

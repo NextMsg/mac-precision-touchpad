@@ -9,6 +9,8 @@ on:
 
 jobs:
   alert:
+    # Community forks must not send their issue data to the upstream Azure board.
+    if: github.repository == 'imbushuo/mac-precision-touchpad'
     runs-on: ubuntu-latest
     steps:
       - uses: danhellem/github-actions-issue-to-work-item@master

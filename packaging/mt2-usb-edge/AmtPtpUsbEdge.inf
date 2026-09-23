@@ -1,0 +1,63 @@
+; Local development package: Magic Trackpad 2 Lightning over USB only.
+[Version]
+Signature="$WINDOWS NT$"
+Class=HIDClass
+ClassGuid={745a17a0-74d3-11d0-b6fe-00a0c90f57da}
+Provider=%Provider%
+CatalogFile=AmtPtpUsbEdge.cat
+DriverVer=09/22/2026,2026.922.4.0
+PnpLockdown=1
+
+[DestinationDirs]
+DriverCopy=13
+
+[SourceDisksNames]
+1=%Disk%,,,""
+
+[SourceDisksFiles]
+AmtPtpDeviceUsbUm.dll=1
+
+[Manufacturer]
+%Provider%=Models,NTamd64.10.0...22000
+
+[Models.NTamd64.10.0...22000]
+%Device%=Install,USB\VID_05AC&PID_0265&MI_01
+
+[Install.NT]
+Include=MsHidUmdf.inf,WUDFRD.inf
+Needs=MsHidUmdf.NT,WUDFRD_LowerFilter.NT
+CopyFiles=DriverCopy
+
+[Install.NT.HW]
+Include=MsHidUmdf.inf,WUDFRD.inf
+Needs=MsHidUmdf.NT.HW,WUDFRD_LowerFilter.NT.HW
+
+[Install.NT.Services]
+Include=MsHidUmdf.inf,WUDFRD.inf
+Needs=MsHidUmdf.NT.Services,WUDFRD_LowerFilter.NT.Services
+
+[Install.NT.Filters]
+Include=WUDFRD.inf
+Needs=WUDFRD_LowerFilter.NT.Filters
+
+[Install.NT.Wdf]
+UmdfDispatcher=NativeUSB
+UmdfService=AmtPtpDeviceUsbUm,DriverService
+UmdfServiceOrder=AmtPtpDeviceUsbUm
+UmdfKernelModeClientPolicy=AllowKernelModeClients
+UmdfFileObjectPolicy=AllowNullAndUnknownFileObjects
+UmdfMethodNeitherAction=Copy
+UmdfFsContextUsePolicy=CanUseFsContext2
+UmdfHostPriority=PriorityHigh
+
+[DriverService]
+UmdfLibraryVersion=2.15.0
+ServiceBinary=%13%\AmtPtpDeviceUsbUm.dll
+
+[DriverCopy]
+AmtPtpDeviceUsbUm.dll
+
+[Strings]
+Provider="Local Magic Trackpad Development"
+Disk="Magic Trackpad 2 USB Edge Rejection"
+Device="Magic Trackpad 2 USB (Edge Rejection 5%)"

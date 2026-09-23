@@ -1,0 +1,14 @@
+name: USB contact tests
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  contact-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Exercise Type 5 contact processing
+        run: python3 tests/run_edge_rejection.py

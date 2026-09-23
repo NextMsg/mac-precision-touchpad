@@ -1,5 +1,8 @@
 // Device.h: Device definitions
 
+#include "EdgeRejection.h"
+#include "ContactLifecycle.h"
+
 EXTERN_C_START
 
 // Device context struct
@@ -25,6 +28,8 @@ typedef struct _DEVICE_CONTEXT
 	BOOL                        IsButtonReportOn;
 
 	LARGE_INTEGER				PerfCounter;
+	AMT_EDGE_REJECTION_STATE     EdgeRejection;
+	AMT_CONTACT_LIFECYCLE        ContactLifecycle;
 
 } DEVICE_CONTEXT, *PDEVICE_CONTEXT;
 

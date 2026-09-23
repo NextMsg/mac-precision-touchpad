@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 **Pre-report checks**
-- [ ] Have you checked (use search) [Azure DevOps Board](https://ligstd.visualstudio.com/Apple%20PTP%20Trackpad/_workitems/recentlyupdated) and Github issues for known bugs and plans?
+- [ ] I checked this repository's README and existing issues for known limitations and plans.
 
 **Is your feature request related to a problem? Please describe.**
 A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
